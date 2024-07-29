@@ -18,7 +18,6 @@ const Formulario = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes manejar el envío del formulario
     console.log('Datos del formulario:', formData);
   };
 
