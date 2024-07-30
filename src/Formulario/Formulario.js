@@ -8,6 +8,8 @@ const Formulario = () => {
     telefono: ''
   });
 
+  const [personas, setPersonas] = useState([]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,11 +21,20 @@ const Formulario = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Datos del formulario:', formData);
+
+    setPersonas([...personas, formData]);
+
+    setFormData({
+      nombre: '',
+      apellido: '',
+      telefono: ''
+    });
   };
 
   return (
+    <div className="columns">
     <div className="form-container">
-      <h2>Formulario</h2>
+      <h2>FORMULARIO</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="nombre">Nombre:</label>
@@ -60,6 +71,20 @@ const Formulario = () => {
         </div>
         <button type="submit">Enviar</button>
       </form>
+      </div>
+
+      <div className="lista-personas">
+        <h3>LISTA PERSONAS</h3>
+        <ul>
+          {personas.map((persona, index) => (
+            <li key={index}>
+              <strong>Nombre:</strong> {persona.nombre} <br />
+              <strong>Apellido:</strong> {persona.apellido} <br />
+              <strong>Teléfono:</strong> {persona.telefono}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
