@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Formulario.css';
 
 const Formulario = () => {
+
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -9,6 +10,37 @@ const Formulario = () => {
   });
 
   const [personas, setPersonas] = useState([]);
+
+  const loadContacts = () => {
+    fetch("http://localhost:8081/contacts")
+      .then(response => response.json())
+      .then(data => {
+        setPersonas(data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  const createContact = () => {
+    fetch("http://localhost:8081/contact", {
+      method: "POST",
+      body: JSON.stringify(formData)
+    })
+    .then(data => {
+      setFormData({
+        Nombre: '',
+        Apellido: '',
+        Telefono: ''
+      });
+      loadContacts()
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(() => { loadContacts()}, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,15 +53,9 @@ const Formulario = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Datos del formulario:', formData);
-
-    setPersonas([...personas, formData]);
-
-    setFormData({
-      nombre: '',
-      apellido: '',
-      telefono: ''
-    });
+    createContact()
   };
+
 
   return (
     <div className="columns">
@@ -40,7 +66,7 @@ const Formulario = () => {
           <label htmlFor="nombre">Nombre:</label>
           <input 
             type="text" 
-            id="nombre" 
+            id="Nombre" 
             name="nombre" 
             value={formData.nombre} 
             onChange={handleChange} 
@@ -51,7 +77,7 @@ const Formulario = () => {
           <label htmlFor="apellido">Apellido:</label>
           <input 
             type="text" 
-            id="apellido" 
+            id="Apellido" 
             name="apellido" 
             value={formData.apellido} 
             onChange={handleChange} 
@@ -62,7 +88,7 @@ const Formulario = () => {
           <label htmlFor="telefono">Teléfono:</label>
           <input 
             type="tel" 
-            id="telefono" 
+            id="Telefono" 
             name="telefono" 
             value={formData.telefono} 
             onChange={handleChange} 
